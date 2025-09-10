@@ -4,6 +4,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.querySelector('.submit-btn');
     const btnText = document.querySelector('.btn-text');
     const btnLoading = document.querySelector('.btn-loading');
+    const projectLeadSelect = document.getElementById('projectLeadSelect');
+
+    // Load project leads from server settings
+    let projectLeadDirectory = {};
+    async function loadProjectLeads() {
+        try {
+            const res = await fetch('/api/settings');
+            const json = await res.json();
+            projectLeadDirectory = json.projectLeads || {};
+            populateProjectLeadOptions();
+        } catch (e) {
+            console.error('Failed to load project leads:', e);
+        }
+    }
+
+    // Populate dropdown
+    function populateProjectLeadOptions() {
+        projectLeadSelect.innerHTML = '';
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select a project lead';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        projectLeadSelect.appendChild(placeholder);
+
+        Object.keys(projectLeadDirectory).forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            projectLeadSelect.appendChild(opt);
+        });
+    }
+    loadProjectLeads();
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -16,11 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Get form data
             const formData = new FormData(form);
+            const selectedProjectLeadName = projectLeadSelect ? projectLeadSelect.value : '';
+            const selectedProjectLeadAccountId = selectedProjectLeadName ? projectLeadDirectory[selectedProjectLeadName] : '';
+
             const data = {
                 clientName: formData.get('clientName'),
                 opName: formData.get('opName'),
                 opPhases: formData.getAll('opPhases'),
-                projectLead: formData.get('projectLead') || '',
+                projectLead: selectedProjectLeadName || '',
+                projectLeadAccountId: selectedProjectLeadAccountId || '',
                 pointOfContact: formData.get('pointOfContact') || '',
                 startDate: formData.get('startDate') || '',
                 endDate: formData.get('endDate') || ''

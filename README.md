@@ -251,20 +251,26 @@ You can now access OpFlows at `https://opflows.example.com`.
 
 ## Docker (with built-in HTTPS)
 
-Run OpFlows via Docker and mount your certificates folder:
+Run OpFlows via Docker and mount your certificates and a writable data folder:
 
 ### 1) Prepare certs
 - Place your certificate chain and private key in a folder on the host, e.g. `./certificates`:
   - `fullchain.pem`
   - `privkey.pem`
 
-### 2) Build and run with docker-compose
+### 2) Create a data folder for settings
+```bash
+mkdir -p data
+```
+
+### 3) Build and run with docker-compose
 ```bash
 docker compose up -d --build
 ```
 This will:
 - Bind to port 3000
 - Mount `./certificates` into the container at `/certificates`
+- Mount `./data` into the container at `/app/data` for persistent settings
 - Enable HTTPS by default (can be toggled via `HTTPS_ENABLED=0`)
 
 Environment overrides (optional):
@@ -274,7 +280,7 @@ CERT_FILE=fullchain.pem
 KEY_FILE=privkey.pem
 ```
 
-### 3) Access the app
+### 4) Access the app
 - HTTPS: https://your-server:3000
 - HTTP (if HTTPS disabled): http://your-server:3000
 

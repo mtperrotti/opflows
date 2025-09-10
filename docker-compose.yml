@@ -10,9 +10,9 @@ services:
       - CERT_FILE=${CERT_FILE:-fullchain.pem}
       - KEY_FILE=${KEY_FILE:-privkey.pem}
     volumes:
-      - ./settings.json:/app/settings.json
+      - ./data:/app/data
       - ./certificates:/certificates:ro
     ports:
-      - "3000:3000"
+      - "443:3000"
     restart: unless-stopped
 

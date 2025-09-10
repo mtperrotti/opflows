@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadBtn = document.getElementById('loadSettings');
     const btnText = document.querySelector('.btn-text');
     const btnLoading = document.querySelector('.btn-loading');
+    const leadsList = document.getElementById('leadsList');
+    const addLeadBtn = document.getElementById('addLeadBtn');
+    const leadNameInput = document.getElementById('leadName');
+    const leadAccountIdInput = document.getElementById('leadAccountId');
+
+    let projectLeads = {};
 
     // Load current settings on page load
     loadCurrentSettings();
@@ -26,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(form);
             const data = {
                 webhookUrl: formData.get('webhookUrl'),
-                webhookSecret: formData.get('webhookSecret')
+                webhookSecret: formData.get('webhookSecret'),
+                projectLeads: projectLeads
             };
 
             // Send settings to server
@@ -67,6 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Don't populate sensitive fields, but show status
             updateConfigStatus(settings);
+
+            // Project leads
+            projectLeads = settings.projectLeads || {};
+            renderLeadsList();
 
             showResult('success', 'Current settings loaded', { 
                 message: 'Settings loaded successfully. Sensitive fields are not displayed for security.' 
@@ -115,5 +126,44 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Scroll to result
         result.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderLeadsList() {
+        if (!leadsList) return;
+        const names = Object.keys(projectLeads).sort();
+        if (names.length === 0) {
+            leadsList.innerHTML = '<div class="help-text">No project leads configured.</div>';
+            return;
+        }
+        leadsList.innerHTML = names.map(name => `
+            <div class="status-item">
+                <span class="status-label">${name}</span>
+                <span class="status-value configured">${projectLeads[name]}</span>
+                <button type="button" data-name="${name}" class="btn-secondary btn-small">Remove</button>
+            </div>
+        `).join('');
+        leadsList.querySelectorAll('button[data-name]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const n = btn.getAttribute('data-name');
+                delete projectLeads[n];
+                renderLeadsList();
+            });
+        });
+    }
+
+    if (addLeadBtn) {
+        addLeadBtn.addEventListener('click', () => {
+            const name = (leadNameInput.value || '').trim();
+            const accountId = (leadAccountIdInput.value || '').trim();
+            if (!name || !accountId) {
+                showResult('error', 'Name and Account ID are required', {});
+                return;
+            }
+            projectLeads[name] = accountId;
+            leadNameInput.value = '';
+            leadAccountIdInput.value = '';
+            renderLeadsList();
+            showResult('success', 'Lead added/updated (remember to Save Settings)', {});
+        });
     }
 });

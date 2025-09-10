@@ -10,13 +10,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
-// Settings file path
-const SETTINGS_FILE = path.join(__dirname, 'settings.json');
+// Settings file path (directory-based for robust Docker volume)
+const SETTINGS_DIR = process.env.SETTINGS_DIR || path.join(__dirname, 'data');
+const SETTINGS_FILE = path.join(SETTINGS_DIR, 'settings.json');
 
 // Default settings
 const defaultSettings = {
     webhookUrl: '',
-    webhookSecret: ''
+    webhookSecret: '',
+    projectLeads: {}
 };
 
 // Load settings from file
@@ -35,6 +37,9 @@ function loadSettings() {
 // Save settings to file
 function saveSettings(settings) {
     try {
+        if (!fs.existsSync(SETTINGS_DIR)) {
+            fs.mkdirSync(SETTINGS_DIR, { recursive: true });
+        }
         fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
         return true;
     } catch (error) {
@@ -65,20 +70,22 @@ app.get('/api/settings', (req, res) => {
     // Don't return sensitive data
     res.json({
         webhookUrl: settings.webhookUrl,
-        hasWebhookSecret: !!settings.webhookSecret
+        hasWebhookSecret: !!settings.webhookSecret,
+        projectLeads: settings.projectLeads || {}
     });
 });
 
 // Update settings
 app.post('/api/settings', (req, res) => {
     try {
-        const { webhookUrl, webhookSecret } = req.body;
+        const { webhookUrl, webhookSecret, projectLeads } = req.body;
         const currentSettings = loadSettings();
         
         const newSettings = {
             ...currentSettings,
             webhookUrl: webhookUrl || currentSettings.webhookUrl,
-            webhookSecret: webhookSecret || currentSettings.webhookSecret
+            webhookSecret: webhookSecret || currentSettings.webhookSecret,
+            projectLeads: (projectLeads && typeof projectLeads === 'object') ? projectLeads : (currentSettings.projectLeads || {})
         };
 
         if (saveSettings(newSettings)) {
@@ -95,7 +102,7 @@ app.post('/api/settings', (req, res) => {
 // Webhook endpoint to send data to Jira
 app.post('/send-webhook', async (req, res) => {
     try {
-        const { clientName, opName, opPhases, projectLead, pointOfContact, startDate, endDate } = req.body;
+        const { clientName, opName, opPhases, projectLead, projectLeadAccountId, pointOfContact, startDate, endDate } = req.body;
         const settings = loadSettings();
         
         // Validate required fields
@@ -127,7 +134,7 @@ app.post('/send-webhook', async (req, res) => {
                 phases: phasesString,
                 startDate: startDate || '',
                 endDate: endDate || '',
-                projectLead: projectLead || '',
+                projectLead: projectLeadAccountId || projectLead || '',
                 pointOfContact: pointOfContact || ''
             }
         };

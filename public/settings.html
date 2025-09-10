@@ -54,6 +54,25 @@
                     </div>
                 </div>
 
+                <div class="settings-section">
+                    <h2>Project Leads</h2>
+                    <p class="help-text">Manage the name → account ID mapping used by the Project Lead dropdown.</p>
+
+                    <div id="leadsList" class="leads-list"></div>
+
+                    <div class="form-row-2" style="margin-top:12px;">
+                        <div class="form-group">
+                            <label for="leadName">Name</label>
+                            <input type="text" id="leadName" placeholder="e.g., Jane Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="leadAccountId">Account ID</label>
+                            <input type="text" id="leadAccountId" placeholder="e.g., acc_1234567890">
+                        </div>
+                    </div>
+                    <button type="button" id="addLeadBtn" class="btn-secondary">Add / Update Lead</button>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" id="loadSettings" class="btn-secondary">Load Current Settings</button>
                     <button type="submit" class="submit-btn">
