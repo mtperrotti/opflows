@@ -13,6 +13,6 @@ services:
       - ./data:/app/data
       - ./certificates:/certificates:ro
     ports:
-      - "443:3000"
+      - "80:3000"
     restart: unless-stopped
 

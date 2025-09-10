@@ -536,3 +536,29 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="password"]:focus 
 @media (max-width: 640px) {
     .form-row-2 { grid-template-columns: 1fr !important; }
 }
+
+
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #0b2447;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background: #0a1226;
+    color: #e2e8f0;
+    font-family: inherit;
+    appearance: none; /* remove browser arrow */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23e2e8f0' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: #38bdf8;
+    background: #0e1a39;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
