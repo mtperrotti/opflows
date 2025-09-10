@@ -121,3 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+window.addEventListener("DOMContentLoaded" , () => {
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+});

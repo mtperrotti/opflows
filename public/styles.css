@@ -273,14 +273,14 @@ input[type="password"]:focus {
 .settings-section {
     margin-bottom: 30px;
     padding: 20px;
-    background: #f8fafc;
+    background: #0f1b37 ;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
 }
 
 .settings-section h2 {
     margin: 0 0 20px 0;
-    color: #374151;
+    color: #e2e8f0;
     font-size: 1.25rem;
     font-weight: 600;
 }
@@ -320,7 +320,7 @@ input[type="password"]:focus {
 
 .config-notice p {
     margin: 0;
-    color: #92400e;
+    color: #c70000ff;
 }
 
 .config-notice a {
@@ -561,4 +561,13 @@ select:focus {
     border-color: #38bdf8;
     background: #0e1a39;
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+
+.checkbox-label input[type="checkbox"]:checked ~ .checkbox-text {
+    color: #000 !important;
+}
+
+.checkbox-label:hover input[type="checkbox"]:checked ~ .checkbox-text {
+    color: #e2e8f0 !important;
 }
