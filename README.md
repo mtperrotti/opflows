@@ -72,16 +72,6 @@ Payload:
 
 ## Customization
 
-### Changing the Jira Project Key
-
-Use the Settings page to change the project key, or edit `settings.json`:
-
-```json
-{
-  "projectKey": "YOUR_PROJECT_KEY"
-}
-```
-
 ### Adding More Operation Phases
 
 Edit `public/index.html` and add new checkbox options in the checkbox-group div:
