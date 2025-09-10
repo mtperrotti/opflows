@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpFlows</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>OpFlows</h1>
+            <p>Offensive Operations Automation Webhooks</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <a href="/" class="nav-tab active">Main Form</a>
+            <a href="/settings" class="nav-tab">Settings</a>
+        </nav>
+
+        <main>
+            <form id="webhookForm" class="webhook-form">
+                <div class="form-group">
+                    <label for="clientName">Client Name *</label>
+                    <input type="text" id="clientName" name="clientName" required 
+                           placeholder="Enter client name">
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="projectLead">Project Lead</label>
+                        <input type="text" id="projectLead" name="projectLead" 
+                               placeholder="e.g., Jane Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="pointOfContact">Point of Contact</label>
+                        <input type="text" id="pointOfContact" name="pointOfContact" 
+                               placeholder="e.g., John Smith">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="opName">Operation Name *</label>
+                    <input type="text" id="opName" name="opName" required 
+                           placeholder="Enter operation name">
+                </div>
+
+                <div class="form-group compact-group">
+                    <label>Operation Phases</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="Internal">
+                            <span class="checkmark"></span>
+                            Internal
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="External">
+                            <span class="checkmark"></span>
+                            External
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="Web app">
+                            <span class="checkmark"></span>
+                            Web app
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="Desktop App">
+                            <span class="checkmark"></span>
+                            Desktop App
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="Social Engineering">
+                            <span class="checkmark"></span>
+                            Social Engineering
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="cloud">
+                            <span class="checkmark"></span>
+                            cloud
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="Mobile">
+                            <span class="checkmark"></span>
+                            Mobile
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="code review">
+                            <span class="checkmark"></span>
+                            code review
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="physical">
+                            <span class="checkmark"></span>
+                            physical
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="opPhases" value="IOT">
+                            <span class="checkmark"></span>
+                            IOT
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Engagement Dates</label>
+                    <div class="date-row">
+                        <div class="date-field">
+                            <label for="startDate">Start</label>
+                            <input type="date" id="startDate" name="startDate" placeholder="YYYY-MM-DD">
+                        </div>
+                        <div class="date-field">
+                            <label for="endDate">End</label>
+                            <input type="date" id="endDate" name="endDate" placeholder="YYYY-MM-DD">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-notice">
+                    <p><strong>Note:</strong> Webhook configuration is managed in <a href="/settings">Settings</a>. 
+                    Please configure your Jira webhook URL there before sending webhooks.</p>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span class="btn-text">Send to Jira</span>
+                    <span class="btn-loading" style="display: none;">Sending...</span>
+                </button>
+            </form>
+
+            <div id="result" class="result" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

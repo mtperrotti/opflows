@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Jira Webhook Server</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Settings</h1>
+            <p>Configure your Jira and webhook settings</p>
+        </header>
+
+        <main>
+            <nav class="nav-tabs">
+                <a href="/" class="nav-tab">Main Form</a>
+                <a href="/settings" class="nav-tab active">Settings</a>
+            </nav>
+
+            <form id="settingsForm" class="settings-form">
+                <div class="settings-section">
+                    <h2>Jira Webhook Configuration</h2>
+                    
+                    <div class="form-group">
+                        <label for="webhookUrl">Jira Webhook URL *</label>
+                        <input type="url" id="webhookUrl" name="webhookUrl" required 
+                               placeholder="https://your-domain.atlassian.net/rest/webhooks/1.0/webhook/your-webhook-id">
+                        <small class="help-text">Your Jira webhook URL for automation triggers</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="webhookSecret">Webhook Secret</label>
+                        <input type="password" id="webhookSecret" name="webhookSecret" 
+                               placeholder="Enter webhook secret">
+                        <small class="help-text">Optional: Secret for webhook authentication</small>
+                    </div>
+
+                    
+                </div>
+
+                <div class="settings-section">
+                    <h2>Webhook Information</h2>
+                    <div class="info-box">
+                        <p><strong>How to set up Jira webhooks:</strong></p>
+                        <ol>
+                            <li>Go to your Jira project settings</li>
+                            <li>Navigate to <strong>Automation</strong> → <strong>Rules</strong></li>
+                            <li>Create a new rule with <strong>Webhook received</strong> trigger</li>
+                            <li>Copy the webhook URL and paste it above</li>
+                            <li>Configure your automation actions (create issues, send notifications, etc.)</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="loadSettings" class="btn-secondary">Load Current Settings</button>
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Save Settings</span>
+                        <span class="btn-loading" style="display: none;">Saving...</span>
+                    </button>
+                </div>
+            </form>
+
+            <div id="result" class="result" style="display: none;"></div>
+
+                <div class="settings-info">
+                    <h3>Configuration Status</h3>
+                    <div id="configStatus" class="config-status">
+                        <div class="status-item">
+                            <span class="status-label">Webhook URL:</span>
+                            <span id="webhookUrlStatus" class="status-value">Not configured</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Webhook Secret:</span>
+                            <span id="webhookSecretStatus" class="status-value">Not configured</span>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>

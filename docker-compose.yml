@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  opflows:
+    build: .
+    container_name: opflows
+    environment:
+      - PORT=3000
+      - HTTPS_ENABLED=${HTTPS_ENABLED:-1}
+      - CERT_DIR=/certificates
+      - CERT_FILE=${CERT_FILE:-fullchain.pem}
+      - KEY_FILE=${KEY_FILE:-privkey.pem}
+    volumes:
+      - ./settings.json:/app/settings.json
+      - ./certificates:/certificates:ro
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
