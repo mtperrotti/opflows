@@ -21,36 +21,85 @@
 
             <form id="settingsForm" class="settings-form">
                 <div class="settings-section">
-                    <h2>Jira Webhook Configuration</h2>
+                    <h2>Jira API Configuration</h2>
                     
                     <div class="form-group">
-                        <label for="webhookUrl">Jira Webhook URL *</label>
-                        <input type="url" id="webhookUrl" name="webhookUrl" required 
-                               placeholder="https://your-domain.atlassian.net/rest/webhooks/1.0/webhook/your-webhook-id">
-                        <small class="help-text">Your Jira webhook URL for automation triggers</small>
+                        <label for="jiraDomain">Jira Domain *</label>
+                        <input type="text" id="jiraDomain" name="jiraDomain" required 
+                               placeholder="your-company">
+                        <small class="help-text">Enter ONLY the domain part (e.g., 'your-company' if your Jira URL is https://your-company.atlassian.net). Do NOT include 'https://' or '.atlassian.net'</small>
+                    </div>
+
+                    <div class="form-group credentials-group">
+                        <div class="credentials-input">
+                            <label for="jiraEmail">Jira Email *</label>
+                                <input type="email" id="jiraEmail" name="jiraEmail" required 
+                                       placeholder="your-email@company.com">
+                            <small class="help-text">The email address associated with your Jira account</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group credentials-group">
+                        <div class="credentials-input">
+                            <label for="jiraApiToken">Jira API Token *</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="jiraApiToken" name="jiraApiToken" required 
+                                       placeholder="Enter your Jira API token">
+                            </div>
+                            <small class="help-text">Generate an API token from https://id.atlassian.com/manage/api-tokens</small>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="webhookSecret">Webhook Secret</label>
-                        <input type="password" id="webhookSecret" name="webhookSecret" 
-                               placeholder="Enter webhook secret">
-                        <small class="help-text">Optional: Secret for webhook authentication</small>
+                        <label for="jiraProjectKey">Jira Project Key *</label>
+                        <input type="text" id="jiraProjectKey" name="jiraProjectKey" required 
+                               placeholder="PROJ">
+                        <small class="help-text">The project key for your Jira project (e.g., 'PROJ', 'SEC')</small>
                     </div>
-
-                    
                 </div>
 
                 <div class="settings-section">
-                    <h2>Webhook Information</h2>
+                    <h2>Jira API Information</h2>
                     <div class="info-box">
-                        <p><strong>How to set up Jira webhooks:</strong></p>
+                        <p><strong>How to set up Jira API access:</strong></p>
                         <ol>
-                            <li>Go to your Jira project settings</li>
-                            <li>Navigate to <strong>Automation</strong> → <strong>Rules</strong></li>
-                            <li>Create a new rule with <strong>Webhook received</strong> trigger</li>
-                            <li>Copy the webhook URL and paste it above</li>
-                            <li>Configure your automation actions (create issues, send notifications, etc.)</li>
+                            <li>Go to <a href="https://id.atlassian.com/manage/api-tokens" target="_blank">https://id.atlassian.com/manage/api-tokens</a> and generate an API token</li>
+                            <li>Enter your Jira domain (the part before '.atlassian.net' in your Jira URL)</li>
+                            <li>Enter the email address associated with your Jira account</li>
+                            <li>Enter your project key (found in Jira project settings)</li>
+                            <li>The system will automatically create epics, tasks, and subtasks using the Jira REST API</li>
                         </ol>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h2>Engagement Type Configuration</h2>
+                    <p class="help-text">Configure the tasks and subtasks that are created for each engagement type.</p>
+
+                    <div id="engagementTypesList" class="engagement-types-list"></div>
+
+                    <div class="form-group">
+                        <label for="engagementTypeSelect">Engagement Type</label>
+                        <select id="engagementTypeSelect">
+                            <option value="">Select an engagement type to configure</option>
+                        </select>
+                    </div>
+
+                    <div id="engagementTypeConfig" style="display: none;">
+                        <h3>Configure Tasks and Subtasks</h3>
+                        <div id="tasksList" class="tasks-list"></div>
+                        
+                        <div class="form-row-2" style="margin-top:12px;">
+                            <div class="form-group">
+                                <label for="taskName">Task Name</label>
+                                <input type="text" id="taskName" placeholder="e.g., Network Discovery">
+                            </div>
+                            <div class="form-group">
+                                <label for="subtasksInput">Subtasks (comma-separated)</label>
+                                <input type="text" id="subtasksInput" placeholder="e.g., Scanning, Enumeration, Assessment">
+                            </div>
+                        </div>
+                        <button type="button" id="addTaskBtn" class="btn-secondary">Add Task</button>
                     </div>
                 </div>
 
@@ -88,12 +137,20 @@
                     <h3>Configuration Status</h3>
                     <div id="configStatus" class="config-status">
                         <div class="status-item">
-                            <span class="status-label">Webhook URL:</span>
-                            <span id="webhookUrlStatus" class="status-value">Not configured</span>
+                            <span class="status-label">Jira Domain:</span>
+                            <span id="jiraDomainStatus" class="status-value">Not configured</span>
                         </div>
                         <div class="status-item">
-                            <span class="status-label">Webhook Secret:</span>
-                            <span id="webhookSecretStatus" class="status-value">Not configured</span>
+                            <span class="status-label">Jira Email:</span>
+                            <span id="jiraEmailStatus" class="status-value">Not configured</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">API Token:</span>
+                            <span id="jiraApiTokenStatus" class="status-value">Not configured</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Project Key:</span>
+                            <span id="jiraProjectKeyStatus" class="status-value">Not configured</span>
                         </div>
                     </div>
                 </div>

@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Please fill in all required fields');
             }
 
-            // Send webhook request
-            const response = await fetch('/send-webhook', {
+            // Send Jira API request
+            const response = await fetch('/create-jira-issues', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,10 +80,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const responseData = await response.json();
 
             if (response.ok) {
-                showResult('success', 'Webhook sent successfully to Jira automation!', responseData);
+                showResult('success', 'Jira issues created successfully!', responseData);
                 form.reset(); // Clear form on success
             } else {
-                showResult('error', 'Failed to send webhook to Jira automation', responseData);
+                showResult('error', 'Failed to create Jira issues', responseData);
             }
 
         } catch (error) {
@@ -98,10 +98,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showResult(type, message, data) {
         result.className = `result ${type}`;
-        result.innerHTML = `
-            <div><strong>${message}</strong></div>
-            <pre>${JSON.stringify(data, null, 2)}</pre>
-        `;
+        
+        let content = `<div><strong>${message}</strong></div>`;
+        
+        if (type === 'success' && data.results) {
+            // Debug: Log the data to console
+            console.log('Success data:', data);
+            console.log('Subtasks:', data.results.subtasks);
+            
+            // Only show debug info
+            content += `
+                <div style="margin-top: 20px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; padding: 15px;">
+                    <h4 style="color: #374151; margin-bottom: 10px;">🔍 Debug Info</h4>
+                    <pre style="background: white; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.8rem;">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+        } else {
+            // Fallback to JSON display for errors or other cases
+            content += `<pre style="margin-top: 15px; background: #f9fafb; padding: 15px; border-radius: 6px; overflow-x: auto;">${JSON.stringify(data, null, 2)}</pre>`;
+        }
+        
+        result.innerHTML = content;
         result.style.display = 'block';
         
         // Scroll to result
@@ -114,13 +131,84 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', function() {
             const label = this.closest('.checkbox-label');
             if (this.checked) {
-                label.style.backgroundColor = '#f0f9ff';
+                label.style.backgroundColor = '#2d2d2d';
             } else {
                 label.style.backgroundColor = '';
             }
         });
     });
 });
+
+// Global functions for task management
+window.toggleTaskSubtasks = function(taskId) {
+    const container = document.getElementById(taskId);
+    const icon = document.getElementById('icon-' + taskId);
+    
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        icon.textContent = '−';
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        container.style.display = 'none';
+        icon.textContent = '+';
+        icon.style.transform = 'rotate(0deg)';
+    }
+};
+
+window.addSubtask = async function(parentTaskKey, phase) {
+    const subtaskName = prompt('Enter subtask name:');
+    if (!subtaskName) return;
+    
+    try {
+        const response = await fetch('/add-subtask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                parentTaskKey: parentTaskKey,
+                subtaskName: subtaskName,
+                phase: phase
+            })
+        });
+
+        const responseData = await response.json();
+
+        if (response.ok) {
+            alert(`Successfully created subtask: ${responseData.subtask.key}`);
+            // Refresh the page to show the new subtask
+            location.reload();
+        } else {
+            alert(`Failed to create subtask: ${responseData.error}`);
+        }
+    } catch (error) {
+        console.error('Error creating subtask:', error);
+        alert('An error occurred while creating the subtask');
+    }
+};
+
+window.removeSubtask = async function(subtaskKey) {
+    if (confirm(`Are you sure you want to complete subtask ${subtaskKey}?`)) {
+        try {
+            const response = await fetch(`/remove-subtask/${subtaskKey}`, {
+                method: 'DELETE'
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+                alert(`Successfully completed subtask: ${subtaskKey}`);
+                // Refresh the page to update the display
+                location.reload();
+            } else {
+                alert(`Failed to complete subtask: ${responseData.error}`);
+            }
+        } catch (error) {
+            console.error('Error completing subtask:', error);
+            alert('An error occurred while completing the subtask');
+        }
+    }
+};
 
 window.addEventListener("DOMContentLoaded" , () => {
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
