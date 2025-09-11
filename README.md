@@ -52,6 +52,11 @@ A sophisticated web application that leverages the Jira REST API to create and m
    npm install
    ```
 
+2. **Custom Fields (Optional)**
+   ```bash
+   edit the settings.json to set custom feilds for epics.
+   ```
+
 2. **Docker Setup (Optional)**
    ```bash
    docker compose up -d --build
