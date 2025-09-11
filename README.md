@@ -6,7 +6,6 @@ A sophisticated web application that leverages the Jira REST API to create and m
 
 - **Direct Jira API Integration**
   - Real-time API communication with Jira
-  - No webhook setup required
   - Secure API token authentication
   - Native Jira issue creation and management
 
@@ -16,12 +15,6 @@ A sophisticated web application that leverages the Jira REST API to create and m
   - Immediate feedback from API operations
   - Interactive task completion tracking
 
-- **Modern Interface**
-  - Clean, responsive dark-themed UI
-  - Form validation and error handling
-  - Dynamic task expansion/collapse
-  - Intuitive subtask management
-
 - **Advanced Configuration**
   - Customizable engagement type templates
   - Project lead management with Jira account integration
@@ -30,18 +23,10 @@ A sophisticated web application that leverages the Jira REST API to create and m
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
 - Jira Cloud instance
 - Jira API token (for direct API authentication)
 - Jira user with appropriate permissions
 
-## API Integration Benefits
-
-- **Direct Communication**: No intermediate webhooks needed
-- **Real-time Operations**: Immediate feedback from Jira
-- **Secure Authentication**: API token-based security
-- **Reduced Complexity**: No webhook configuration required
-- **Better Reliability**: Direct API calls with proper error handling
 
 ## Quick Start
 
@@ -180,36 +165,6 @@ jira-webhook-server/
    - Review API error responses
    - Verify API version compatibility
 
-### Debug Mode
-
-Enable detailed logging:
-```bash
-# In your .env file
-DEBUG=true
-VERBOSE_LOGGING=true
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## Security Notes
-
-- API tokens are stored securely
-- All inputs are sanitized
-- HTTPS recommended for production
-- Regular security updates applied
-
-## Support
-
-For issues and feature requests:
-- Create a GitHub issue
-- Include reproduction steps
-- Attach relevant logs
-docker compose logs --tail 200
 ```
 
 
