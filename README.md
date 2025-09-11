@@ -132,28 +132,7 @@ A sophisticated web application that leverages the Jira REST API to create and m
    - Mark subtasks as complete
    - Remove completed subtasks
 
-## API Integration Details
-
-### Local API Endpoints
-
-These endpoints handle the communication between the UI and Jira's API:
-
-- `POST /create-jira-issues`
-  - Creates epics/tasks using Jira REST API
-  - Handles all necessary API calls in sequence
-  - Returns detailed API response data
-
-- `POST /add-subtask`
-  - Makes direct Jira API call to create subtask
-  - Links subtask to parent using Jira's API
-  - Returns immediate API confirmation
-
-- `DELETE /remove-subtask/:key`
-  - Updates subtask status via Jira API
-  - Handles proper task relationship management
-  - Returns API operation result
-
-### Jira API Integration
+#### Jira API Integration
 
 The tool interacts with several Jira API endpoints:
 
