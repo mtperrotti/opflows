@@ -52,16 +52,7 @@ A sophisticated web application that leverages the Jira REST API to create and m
    npm install
    ```
 
-2. **Configuration**
-   Create a `.env` file:
-   ```env
-   JIRA_DOMAIN=your-domain
-   JIRA_EMAIL=your-email@company.com
-   JIRA_API_TOKEN=your-api-token
-   JIRA_PROJECT_KEY=your-project-key
-   ```
-
-3. **Docker Setup (Optional)**
+2. **Docker Setup (Optional)**
    ```bash
    docker compose up -d --build
    ```
@@ -145,18 +136,6 @@ The tool interacts with several Jira API endpoints:
   - Creates parent-child relationships
   - Manages issue hierarchies
   - Handles subtask associations
-
-### Settings Management
-
-- `GET /api/settings`
-  - Retrieves local configuration
-  - Excludes sensitive API credentials
-  - Returns template configurations
-
-- `POST /api/settings`
-  - Updates local settings
-  - Validates API credentials
-  - Tests API connectivity
 
 ## Project Structure
 
