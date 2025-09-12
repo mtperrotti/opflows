@@ -46,6 +46,13 @@ const defaultSettings = {
                 { name: 'Web Application Discovery', subtasks: ['Application Mapping', 'Technology Stack Analysis', 'Authentication Testing'] },
                 { name: 'Web Application Testing', subtasks: ['Input Validation Testing', 'Session Management Testing', 'Authorization Testing'] }
             ]
+        },
+        'Test Management': {
+            tasks: [
+                { name: 'Project Initiation', subtasks: ['Project Kickoff Meeting', 'Scope Review', 'Access Verification', 'Testing Environment Setup'] },
+                { name: 'Project Management', subtasks: ['Status Updates', 'Client Communication', 'Resource Management', 'Timeline Tracking'] },
+                { name: 'Project Closure', subtasks: ['Data Collection', 'Report Writing', 'Finding Review', 'Deliverable Submission', 'Lessons Learned'] }
+            ]
         }
     }
 };
@@ -305,6 +312,30 @@ app.post('/create-jira-issues', async (req, res) => {
 
     const results = { epic: epic, tasks: [], subtasks: [] };
 
+    const testManagementConfig = settings.engagementTypes['Test Management'];
+    if (testManagementConfig?.tasks) {
+      for (const taskConfig of testManagementConfig.tasks) {
+        const task = await createIssue(settings, 'Task', {
+          summary: `${opName} - ${taskConfig.name}`,
+          description: `${taskConfig.name} for ${clientName} - ${opName}`,
+          epicKey: epic.key,
+          assignee: projectLeadAccountId
+        });
+        results.tasks.push(task);
+
+        // Create subtasks for Test Management
+        for (const subtaskName of taskConfig.subtasks || []) {
+          const subtask = await createIssue(settings, 'Sub-task', {
+            summary: subtaskName,
+            description: `${subtaskName} for ${taskConfig.name} - ${clientName} ${opName}`,
+            parentKey: task.key,
+            assignee: projectLeadAccountId
+          });
+          results.subtasks.push(subtask);
+        }
+      }
+    }
+      
     // Create tasks + subtasks
     for (const phase of opPhases) {
       const phaseConfig = settings.engagementTypes[phase];
@@ -312,7 +343,7 @@ app.post('/create-jira-issues', async (req, res) => {
 
       for (const taskConfig of phaseConfig.tasks) {
         const task = await createIssue(settings, 'Task', {
-          summary: `${taskConfig.name} - ${phase}`,
+          summary: `${opName} - ${taskConfig.name} - ${phase}`,
           description: `${taskConfig.name} for ${clientName} - ${opName} (${phase} phase)`,
           epicKey: epic.key,
           assignee: projectLeadAccountId
