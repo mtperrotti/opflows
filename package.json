@@ -11,9 +11,9 @@
     "debian-setup": "sudo apt-get update && sudo apt-get install -y nodejs npm && npm install"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.22.0",
     "axios": "^1.12.0",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.4",
     "cors": "^2.8.5"
   },
   "devDependencies": {
